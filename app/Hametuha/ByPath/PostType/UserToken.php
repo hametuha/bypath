@@ -178,7 +178,34 @@ class UserToken extends Singleton {
 		}
 	}
 
-
-
-
+	/**
+	 * Get user token.
+	 *
+	 * @param string $token User token.
+	 *
+	 * @return bool|int
+	 */
+	public static function get_user_from_token( $token ) {
+		$user_id = wp_cache_get( $token, 'bypath_user' );
+		if ( false === $user_id ) {
+			global $wpdb;
+			$query = <<<SQL
+				SELECT post_author FROM {$wpdb->posts}
+				WHERE post_type    = %s
+				  AND post_status  = 'publish'
+				  AND post_excerpt = %s
+				ORDER BY post_date DESC
+				LIMIT 1
+SQL;
+			$result = $wpdb->get_var( $wpdb->prepare( $query, self::POST_TYPE, $token ) );
+			if ( $result && get_user_by( 'id', $result ) ) {
+				// User found.
+				$user_id = (int) $result;
+				wp_cache_set( $token, $user_id, 'bypath_user', 3600 );
+			} else {
+				$user_id = false;
+			}
+		}
+		return $user_id;
+	}
 }
