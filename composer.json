@@ -1,0 +1,22 @@
+{
+  "name": "hametuha/bypath",
+  "description": "A bypath plugin for WordPress REST API server.",
+  "type": "wordpress-plugin",
+  "license": "GPL-3.0",
+  "authors": [
+    {
+      "name": "Hametuha INC",
+      "email": "info@hametuha.co.jp"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "hametuha/pattern": "^0.8.1",
+    "ramsey/uuid": "^3.7"
+  },
+  "autoload": {
+    "psr-0": {
+      "Hametuha\\ByPath": "app"
+    }
+  }
+}
